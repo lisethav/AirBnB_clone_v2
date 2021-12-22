@@ -125,16 +125,16 @@ class HBNBCommand(cmd.Cmd):
         elif words_args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        dict_data = {}
+        data = {}
         for i in words_args[1:]:
             key, value = i.split('=')
             if r'"' in value:
                 value = value.replace('"', '')
             if r'_' in value:
                 value = value.replace('_', ' ')
-            dict_data[key] = value
+            data[key] = value
 
-        new_instance = HBNBCommand.classes[words_args[0]](dict_data)
+        new_instance = HBNBCommand.classes[words_args[0]](data)
         new_instance.save()
         print(new_instance.id)
 
