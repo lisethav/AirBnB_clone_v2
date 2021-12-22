@@ -13,11 +13,11 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         else:
-            r = {}
+            res = {}
             for i, j in FileStorage.__objects.items():
-                if j.class__.__name__ == cls:
-                    r[i] = j
-            return r
+                if j.__class__.__name__ == cls:
+                    res[i] = j
+            return res
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
