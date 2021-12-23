@@ -115,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class
-        whit the given parameters 
+        whit the given parameters
         create <Class name> <param 1> <param 2> <param 3>..."""
         words_args = args.split()
         count = len(words_args)
