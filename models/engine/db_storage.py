@@ -2,10 +2,10 @@
 """
 This is the db_storage class for Airbnb
 """
+from os import getenv
 from models.base_model import Base
 from sqlalchemy import create_engine
-from sqlalchemy.orm import (sessionmaker, scoped_session)
-from os import getenv
+from sqlalchemy.orm import sessionmaker, scoped_session
 from models.user import User
 from models.amenity import Amenity
 from models.city import City
@@ -25,7 +25,8 @@ class DBStorage:
                                 getenv('HBNB_MYSQL_USER'),
                                 getenv('HBNB_MYSQL_PWD'),
                                 getenv('HBNB_MYSQL_HOST'),
-                                getenv('HBNB_MYSQL_DB')))
+                                getenv('HBNB_MYSQL_DB'),
+                                pool_pre_ping=True))
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
@@ -33,11 +34,16 @@ class DBStorage:
         """ query on the current database session """
         list_obj = []
         if cls:
-            list_obj = self.__session.query(cls).all()
+            list_obj += self.__session.query(cls).all()
         else:
-            for cls in (State, City, Place, Amenity, Review, User):
-                list_obj.extend(self.__session.query(cls).all())
-        return {"{}.{}".format(type(cls)._name_, cls.id): cls for cls in list_obj}
+            list_cls = [User, State, City, Amenity, Place, Review]
+            for class_name in list_cls:
+                list_obj += self.__session.query(class_name).all()
+        dict_new = {}
+        for obj in list_obj:
+            key = obj._class.name_ + '.' + str(obj.id)
+            dict_new[key] = obj
+        return dict_new
 
     def new(self, obj):
         """ add the object to the current database session"""
@@ -61,4 +67,3 @@ class DBStorage:
     def close(self):
         """ close a session """
         self.__session.close()
-        
