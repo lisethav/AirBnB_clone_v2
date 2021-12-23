@@ -14,7 +14,6 @@ from models.review import Review
 from models.state import State
 
 
-
 class DBStorage:
     __engine = None
     __session = None
