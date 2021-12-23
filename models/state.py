@@ -16,7 +16,8 @@ class State(BaseModel, Base):
     
     @property
     def cities(self):
-        """Returns all cities in state"""
+        """Returns cities obj
+        """
         new_list = []
         for city in models.storage.all(City).values():
             if city.state_id == self.id:
